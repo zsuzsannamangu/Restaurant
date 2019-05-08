@@ -22,7 +22,6 @@ namespace BestRestaurant.Controllers
       return View();
     }
 
-
     [HttpPost("/restaurant")]
     public ActionResult Create(string name, string address, string phoneNumber)
     {
@@ -30,6 +29,26 @@ namespace BestRestaurant.Controllers
       myRestaurant.Save();
       return RedirectToAction("Index");
     }
+
+    [HttpPost("/restaurant/:{id}")]
+    public IActionResult Destroy()
+    {
+      Restaurant.ClearAll();
+      return RedirectToAction("Index");
+    }
+
+    [HttpGet("/restaurant/:{id}")]
+    public IActionResult Show(string Id)
+    {
+      return View(Restaurant.GetRestaurant(Id));
+    }
+    //
+    // [HttpPost("/restaurant/show")]
+    // public ActionResult Show()
+    // {
+    //   return View();
+    // }
+
 
     // [HttpGet("/animals/SortByType")]
     // public ActionResult SortByType()

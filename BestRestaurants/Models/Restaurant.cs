@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System;
@@ -20,6 +21,38 @@ namespace BestRestaurant.Models
       Address = address;
       PhoneNumber = phoneNumber;
       Id = id;
+    }
+
+    public int GetId()
+    {
+      return Id;
+    }
+
+    public static Restaurant GetRestaurant(string name)
+    {
+      Restaurant returnRestaurant = new Restaurant("name", "address", "phoneNumber");
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM restaurants WHERE name = @name;";
+      MySqlParameter thisName = new MySqlParameter();
+      thisName.ParameterName = "@name";
+      thisName.Value = name;
+      cmd.Parameters.Add(thisName);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        string Name = rdr.GetString(0);
+        string Address = rdr.GetString(1);
+        string PhoneNumber = rdr.GetString(2);
+        returnRestaurant = new Restaurant(Name, Address, PhoneNumber);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return returnRestaurant;
     }
 
     public static void ClearAll()
@@ -56,24 +89,12 @@ namespace BestRestaurant.Models
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
       cmd.CommandText = @"INSERT INTO restaurants (name, address, phoneNumber) VALUES (@RestaurantsName, @RestaurantsAddress, @RestaurantsPhoneNumber);";
-      // MySqlParameter name = new MySqlParameter();
-      // name.ParameterName = ;
-      // name.Value = this.Name;
-      //
-      // MySqlParameter address = new MySqlParameter();
-      // address.ParameterName = ;
-      // address.Value = this.Address;
-      //
-      // MySqlParameter phoneNumber = new MySqlParameter();
-      // phoneNumber.ParameterName = "@RestaurantsPhoneNumber";
-      // phoneNumber.Value = this.phoneNumber;
 
-      // cmd.Parameters.AddWithValue("@");
       cmd.Parameters.AddWithValue("@RestaurantsName", Name);
       cmd.Parameters.AddWithValue("@RestaurantsAddress", Address);
       cmd.Parameters.AddWithValue("@RestaurantsPhoneNumber", PhoneNumber);
       cmd.ExecuteNonQuery();
-      // more logic will go here
+
       Id = (int) cmd.LastInsertedId;
       conn.Close();
       if (conn != null)
@@ -93,26 +114,31 @@ namespace BestRestaurant.Models
       cmd.CommandText = @"SELECT * FROM restaurants;";
       MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
 
-    while (rdr.Read())
-    {
-      string name = rdr.GetString(0);
-      string address = rdr.GetString(1);
-      string phoneNumber = rdr.GetString(2);
-      int id = rdr.GetInt32(3);
+      while (rdr.Read())
+      {
+        string name = rdr.GetString(0);
+        string address = rdr.GetString(1);
+        string phoneNumber = rdr.GetString(2);
+        int id = rdr.GetInt32(3);
 
-      Restaurant newRest = new Restaurant(name, address, phoneNumber, id);
-      allRest.Add(newRest);
+        Restaurant newRest = new Restaurant(name, address, phoneNumber, id);
+        allRest.Add(newRest);
+      }
+
+      conn.Close();
+
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+
+      return allRest;
+
     }
 
-    conn.Close();
-
-    if (conn != null)
-    {
-      conn.Dispose();
-    }
-
-    return allRest;
-
-    }
- }
+    // public static void RemoveRestaurant(string input)
+    // {
+    //   ClearAll(input, "name", "address", "phoneNumber");
+    // }
+  }
 }

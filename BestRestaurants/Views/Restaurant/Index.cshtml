@@ -11,9 +11,9 @@
 {
   @foreach (Restaurant restaurant in Model)
   {
-    <li>Type of animal: @restaurant.Name</li>
-    <li>Name of restaurant: <b>@restaurant.Address</b></li>
-    <li>Sex of restaurant: @restaurant.PhoneNumber</li>
+    <li><a href="/restaurant/:@restaurant.Id">@restaurant.Name</a></li>
+    <li>Address: @restaurant.Address</li>
+    <li>Phone Number: @restaurant.PhoneNumber</li>
     <br>
   }
 }

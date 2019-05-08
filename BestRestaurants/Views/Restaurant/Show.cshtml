@@ -1,16 +1,11 @@
-@{
-  Layout = "_Layout";
-}
+@using BestRestaurant.Models;
 
-@* <h1>@Model["Restaurant"].CountryName</h1> *@
+<h1>Restaurant Details</h1>
 
-<p>Type: @Model["Restaurant"].Name</p>
-<p>Name: @Model["Restaurant"].Address</p>
-<p>Sex: @Model["Restaurant"].PhoneNumber</p>
+@Model.Name
+@Model.Address
+@Model.PhoneNumber
 
-@* <ol>
-@foreach (Animal animal in @Model["animal"])
-{
-  <li><a href="/animals/@Model["animal"].CountryCode/cities/@city.CityId">@city.CityName</a></li>
-}
-</ol> *@
+<form action="/restaurant/:@Model.Id" method="post">
+  <button type="submit" name="button">Delete</button>
+</form>
