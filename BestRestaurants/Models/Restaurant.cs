@@ -21,6 +21,7 @@ namespace BestRestaurant.Models
       Address = address;
       PhoneNumber = phoneNumber;
       Id = id;
+      restList = new List<Restaurant>{};
     }
 
     public int GetId()
@@ -28,13 +29,19 @@ namespace BestRestaurant.Models
       return Id;
     }
 
+    public void AddRestaurant(Restaurant item)
+    {
+      restList.Add(item);
+    }
+
+
     public static Restaurant GetRestaurant(string name)
     {
       Restaurant returnRestaurant = new Restaurant("name", "address", "phoneNumber");
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM restaurants WHERE name = @name;";
+      cmd.CommandText = @"SELECT * FROM restaurants WHERE id = @name;";
       MySqlParameter thisName = new MySqlParameter();
       thisName.ParameterName = "@name";
       thisName.Value = name;
@@ -55,12 +62,13 @@ namespace BestRestaurant.Models
       return returnRestaurant;
     }
 
-    public static void ClearAll()
+    public static void RemoveRestaurant(string id, string name)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"DELETE FROM restaurants;";
+      cmd.CommandText = @"DELETE FROM restaurants WHERE id = @name";
+      cmd.Parameters.AddWithValue("@name", name);
       cmd.ExecuteNonQuery();
       conn.Close();
       if (conn != null)
@@ -68,6 +76,26 @@ namespace BestRestaurant.Models
         conn.Dispose();
       }
     }
+  //   private static void RemoveItem(string name, string address, string phoneNumber)
+  //   {
+  //     MySqlConnection conn = DB.Connection();
+  //     conn.Open();
+  //     MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+  //     cmd.CommandText = @"DELETE FROM restaurant WHERE id = @name;";
+  //     cmd.Parameters.AddWithValue("@name", name);
+  //     cmd.ExecuteNonQuery();
+  //   }
+  //   conn.Close();
+  //   if (conn != null)
+  //   {
+  //     conn.Dispose();
+  //   }
+  // }
+    //
+    // public static void RemoveRestaurant(string input)
+    // {
+    //   RemoveItem(input, "name", "address", "phoneNumber");
+    // }
 
     public override bool Equals(System.Object otherRestaurant)
     {
@@ -82,6 +110,7 @@ namespace BestRestaurant.Models
         return (descriptionEquality);
       }
     }
+
 
     public void Save()
     {
@@ -136,9 +165,6 @@ namespace BestRestaurant.Models
 
     }
 
-    // public static void RemoveRestaurant(string input)
-    // {
-    //   ClearAll(input, "name", "address", "phoneNumber");
-    // }
+
   }
 }

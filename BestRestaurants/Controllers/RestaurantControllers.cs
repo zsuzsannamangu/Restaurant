@@ -31,9 +31,9 @@ namespace BestRestaurant.Controllers
     }
 
     [HttpPost("/restaurant/:{id}")]
-    public IActionResult Destroy()
+    public IActionResult Destroy(string id, string name)
     {
-      Restaurant.ClearAll();
+      Restaurant.RemoveRestaurant(id, name);
       return RedirectToAction("Index");
     }
 

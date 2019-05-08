@@ -2,10 +2,15 @@
 
 <h1>Restaurant Details</h1>
 
-@Model.Name
-@Model.Address
-@Model.PhoneNumber
+@Model.Name <br>
+Address: @Model.Address <br>
+Phone Number: @Model.PhoneNumber <br><br>
 
 <form action="/restaurant/:@Model.Id" method="post">
   <button type="submit" name="button">Delete</button>
 </form>
+
+
+@* @Model["restaurant"].Name
+@Model["restaurant"].Address
+@Model["restaurant"].PhoneNumber *@
