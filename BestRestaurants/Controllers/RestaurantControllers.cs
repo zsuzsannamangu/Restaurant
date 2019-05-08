@@ -16,19 +16,21 @@ namespace BestRestaurant.Controllers
       return View(allRest);
     }
 
-    // [HttpGet("/animals/new")]
-    // public ActionResult New()
-    // {
-    //   return View();
-    // }
-    //
-    // [HttpPost("/animals")]
-    // public ActionResult Create(string type, string name, string sex, string breed, DateTime dateOfAdmit)
-    // {
-    //   Animal myAnimal = new Animal(type, name, sex, breed, dateOfAdmit);
-    //   myAnimal.Save();
-    //   return RedirectToAction("Index");
-    // }
+    [HttpGet("/restaurant/new")]
+    public ActionResult New()
+    {
+      return View();
+    }
+
+
+    [HttpPost("/restaurant")]
+    public ActionResult Create(string name, string address, string phoneNumber)
+    {
+      Restaurant myRestaurant = new Restaurant(name, address, phoneNumber);
+      myRestaurant.Save();
+      return RedirectToAction("Index");
+    }
+
     // [HttpGet("/animals/SortByType")]
     // public ActionResult SortByType()
     // {
